@@ -26,15 +26,23 @@ def main():
 
         #Get the address and phone number. Make sure there is no missing data.
         streetAddress = item.find_all(class_='gz-street-address')
-        streetAddress = check(streetAddress)
-        city = item.find_all(class_='gz-address-city')#[0].text
+        streetAddress = check(streetAddress).strip('"')
+        city = item.find_all(class_='gz-address-city')
         city = check(city)
-        state = item.find('span', itemprop='addressRegion')
-        state = check(state)
-        zipCode = item.find('span', itemprop='postalCode')
-        zipCode = check(zipCode)
-        phone = item.find('span', itemprop='telephone')
-        phone = check(phone)
+        if item.find_all(class_='gz-fal gz-fa-phone') != []:
+            state = item.find_all(class_=None)[-3]
+            state = check(state)
+            zipCode = item.find_all(class_=None)[-2]
+            zipCode = check(zipCode)
+            phone = item.find_all(class_=None)[-1]
+            phone = check(phone)
+        else:
+            a = item.find_all(itemprop='citystatezip')
+            state = item.find_all(class_=None)[-2]
+            state = check(state)
+            zipCode = item.find_all(class_=None)[-1]
+            zipCode = check(zipCode)
+            phone = "N/A"
 
         # Since there is a pice of data that is missing from the website, I will
         #write it in manually.
