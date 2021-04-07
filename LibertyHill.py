@@ -5,7 +5,7 @@ import csv
 
 def main():
     # Open the webpage
-    page = requests.get('https://business.georgetownchamber.org/list/search?q=0-9%2c+a&o=alpha')
+    page = requests.get('https://www.pfchamber.com/list/search?q=0-9%2C+a&c=&sa=False')
     soup = BeautifulSoup(page.content, 'html.parser')
 
     # Get all the items in the webpage which we will be using.
@@ -22,8 +22,11 @@ def main():
         try:
             companyName = item.find_all(class_='gz-img-placeholder')[0].text
         except:
-            companyName = item.find_all(class_='gz-card-title')[0].text.strip('\n')
-
+            try:
+                companyName = item.find_all(class_='gz-card-title')[0].text.strip('\n')
+            except:
+                continue
+            
         # If the company is RPI Inc., hard code it
         if companyName == "RPI, Inc":
             writer.writerow(["RPI Inc.", "1880 S Dairy Ashford Rd", "Houston", "TX", "77077", "(128) 155-84444"])
